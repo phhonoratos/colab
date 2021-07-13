@@ -6,6 +6,8 @@ import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 import com.paulohonorato.pontotel.colaborators.exceptions.RegraDeNegocioException;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,15 @@ public class ColaboradorService {
         return repository.save(colaborador);
     }
 
+    public Colaborador atualizar(Colaborador colaborador) {
+        Objects.requireNonNull(colaborador.getId());
+        return repository.save(colaborador);
+    }
+    
+    public Optional<Colaborador> buscarPorId(Long id) {
+        return repository.findById(id);
+    }
+
     public void validarEmail(String email) {
         boolean existe = repository.existsByEmail(email);
         if(existe) {
@@ -49,4 +60,5 @@ public class ColaboradorService {
             throw new RegraDeNegocioException("Já existe um usuário cadastrado com este pis.");
         }
     }
+
 }
