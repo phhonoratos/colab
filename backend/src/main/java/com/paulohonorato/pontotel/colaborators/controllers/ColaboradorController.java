@@ -9,6 +9,7 @@ import com.paulohonorato.pontotel.colaborators.services.ColaboradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,7 @@ public class ColaboradorController {
     public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ColaboradorDTO dto) {
         return service.buscarPorId(id).map(entity -> {
             try {
-                Colaborador colaborador = converterToDto(dto);
+                Colaborador colaborador = converterToEntity(dto);
                 colaborador.setId(entity.getId());
                 service.atualizar(colaborador);
                 return ResponseEntity.ok(colaborador);
@@ -69,7 +70,15 @@ public class ColaboradorController {
         }).orElseGet(() -> new ResponseEntity("Colaborador não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
     }
 
-    public Colaborador converterToDto(ColaboradorDTO dto) {
+    @DeleteMapping("{id}")
+    public ResponseEntity deletar(@PathVariable Long id) {
+        return service.buscarPorId(id).map(entity -> {
+            service.deletar(entity);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }).orElseGet(() -> new ResponseEntity("Colaborador não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
+    }
+
+    public Colaborador converterToEntity(ColaboradorDTO dto) {
         Colaborador colaborador = new Colaborador();
         colaborador.setNome(dto.getNome());
         colaborador.setEmail(dto.getEmail());
