@@ -35,6 +35,11 @@ public class ColaboradorService {
         Objects.requireNonNull(colaborador.getId());
         return repository.save(colaborador);
     }
+
+    public void deletar(Colaborador colaborador) {
+        Objects.requireNonNull(colaborador.getId());
+        repository.delete(colaborador);
+    }
     
     public Optional<Colaborador> buscarPorId(Long id) {
         return repository.findById(id);
