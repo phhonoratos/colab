@@ -7,5 +7,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> {
+
+    boolean existsByEmail(String email);
+    
+    boolean existsByCpf(String cpf);
+
+    boolean existsByPis(String pis);
     
 }
