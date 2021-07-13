@@ -1,20 +1,12 @@
-package com.paulohonorato.pontotel.colaborators.entities;
+package com.paulohonorato.pontotel.colaborators.dtos;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 
-@Entity
-@Table(name = "tb_colaborators")
-public class Colaborador implements Serializable {
+public class ColaboradorDTO implements Serializable {
     private static final long serialVerionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
     private String nome;
     private String email;
@@ -29,10 +21,10 @@ public class Colaborador implements Serializable {
     private String pis;
     private String senha;
 
-    public Colaborador() {
+    public ColaboradorDTO() {
     }
 
-    public Colaborador(Long id, String nome, String email, String rua, String numero, String complemento, String cep,
+    public ColaboradorDTO(Long id, String nome, String email, String rua, String numero, String complemento, String cep,
             String municipio, String estado, String pais, String cpf, String pis, String senha) {
         this.id = id;
         this.nome = nome;
@@ -47,6 +39,22 @@ public class Colaborador implements Serializable {
         this.cpf = cpf;
         this.pis = pis;
         this.senha = senha;
+    }
+
+    public ColaboradorDTO(Colaborador entity) {
+        this.id = entity.getId();
+        this.nome = entity.getNome();
+        this.email = entity.getEmail();
+        this.rua = entity.getRua();
+        this.numero = entity.getNumero();
+        this.complemento = entity.getComplemento();
+        this.cep = entity.getCep();
+        this.municipio = entity.getMunicipio();
+        this.estado = entity.getEstado();
+        this.pais = entity.getPais();
+        this.cpf = entity.getCpf();
+        this.pis = entity.getPis();
+        this.senha = entity.getSenha();
     }
 
     public static long getSerialverionuid() {
@@ -173,7 +181,7 @@ public class Colaborador implements Serializable {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Colaborador other = (Colaborador) obj;
+        ColaboradorDTO other = (ColaboradorDTO) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
@@ -184,7 +192,9 @@ public class Colaborador implements Serializable {
 
     @Override
     public String toString() {
-        return "Colaborador [id=" + id + "]";
+        return "ColaboradorDTO [id=" + id + "]";
     }
 
+    
+    
 }
