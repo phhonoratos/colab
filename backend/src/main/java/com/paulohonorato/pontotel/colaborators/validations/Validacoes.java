@@ -1,50 +1,17 @@
-package com.paulohonorato.pontotel.colaborators.services;
+package com.paulohonorato.pontotel.colaborators.validations;
 
-import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
-import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 import com.paulohonorato.pontotel.colaborators.exceptions.RegraDeNegocioException;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class ColaboradorService {
+public class Validacoes {
 
     @Autowired
-    private ColaboradorRepository repository;
-
-    public List<ColaboradorDTO> findAll() {
-        List<Colaborador> result = repository.findAll();
-        return result.stream().map(x -> new ColaboradorDTO(x)).collect(Collectors.toList());
-    }
-
-    public Colaborador cadastrar(Colaborador colaborador) {
-        validarCadastro(colaborador);
-        return repository.save(colaborador);
-    }
-
-    public Colaborador atualizar(Colaborador colaborador) {
-        Objects.requireNonNull(colaborador.getId());
-        ValidarAtualizacao(colaborador);
-        return repository.save(colaborador);
-    }
-
-    public void deletar(Colaborador colaborador) {
-        Objects.requireNonNull(colaborador.getId());
-        repository.delete(colaborador);
-    }
+    ColaboradorRepository repository;
     
-    public Optional<Colaborador> buscarPorId(Long id) {
-        return repository.findById(id);
-    }
-
-    public void validarCadastro(Colaborador colaborador) {
+    public void cadastro(Colaborador colaborador) {
         if(repository.existsByEmail(colaborador.getEmail())) {
             throw new RegraDeNegocioException("Já existe um usuário cadastrado com este email.");
         }
@@ -56,7 +23,7 @@ public class ColaboradorService {
         }
     }
 
-    public void ValidarAtualizacao(Colaborador colaborador) {
+    public void atualizacao(Colaborador colaborador) {
         if(colaborador.getNome() == null || colaborador.getNome().trim().equals("")) {
             throw new RegraDeNegocioException("Informe um NOME com pelo menos 4 letras.");
         }
