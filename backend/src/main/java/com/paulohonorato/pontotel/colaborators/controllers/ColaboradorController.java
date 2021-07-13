@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -51,6 +53,38 @@ public class ColaboradorController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ColaboradorDTO dto) {
+        return service.buscarPorId(id).map(entity -> {
+            try {
+                Colaborador colaborador = converterToDto(dto);
+                colaborador.setId(entity.getId());
+                service.atualizar(colaborador);
+                return ResponseEntity.ok(colaborador);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }).orElseGet(() -> new ResponseEntity("Colaborador não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
+    }
+
+    public Colaborador converterToDto(ColaboradorDTO dto) {
+        Colaborador colaborador = new Colaborador();
+        colaborador.setNome(dto.getNome());
+        colaborador.setEmail(dto.getEmail());
+        colaborador.setPais(dto.getPais());
+        colaborador.setEstado(dto.getEstado());
+        colaborador.setMunicipio(dto.getMunicipio());
+        colaborador.setCep(dto.getCep());
+        colaborador.setRua(dto.getRua());
+        colaborador.setNumero(dto.getNumero());
+        colaborador.setComplemento(dto.getComplemento());
+        colaborador.setCpf(dto.getCpf());
+        colaborador.setPis(dto.getPis());
+        colaborador.setSenha(dto.getSenha());
+
+        return colaborador;
     }
     
 }
