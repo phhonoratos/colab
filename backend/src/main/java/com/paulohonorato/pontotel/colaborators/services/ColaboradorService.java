@@ -3,6 +3,7 @@ package com.paulohonorato.pontotel.colaborators.services;
 import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
+import com.paulohonorato.pontotel.colaborators.exceptions.ErroDeAutenticacao;
 import com.paulohonorato.pontotel.colaborators.exceptions.RegraDeNegocioException;
 
 import java.util.List;
@@ -22,6 +23,19 @@ public class ColaboradorService {
     public List<ColaboradorDTO> findAll() {
         List<Colaborador> result = repository.findAll();
         return result.stream().map(x -> new ColaboradorDTO(x)).collect(Collectors.toList());
+    }
+
+    public Colaborador autenticar(String email, String senha) {
+        Optional<Colaborador> colaborador = repository.findByEmail(email);
+
+        if(!colaborador.isPresent()) {
+            throw new ErroDeAutenticacao("Usuário não encontrado para o email informado.");
+        }
+        if(!colaborador.get().getSenha().equals(senha)) {
+            throw new ErroDeAutenticacao("Senha inválida");
+        }
+
+        return colaborador.get();
     }
 
     public Colaborador cadastrar(Colaborador colaborador) {
