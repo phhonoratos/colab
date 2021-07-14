@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from "components/Card";
+import { withRouter } from 'react-router-dom';
 
 class Login extends React.Component {
 
@@ -11,6 +12,10 @@ class Login extends React.Component {
     entrar = () => {
         console.log('Email: ', this.state.email)
         console.log('Senha: ', this.state.senha)
+    }
+
+    Cadastrar = () => {
+        this.props.history.push('/cadastrar')
     }
 
     render(){
@@ -35,11 +40,11 @@ class Login extends React.Component {
                     </fieldset>
                     <button className="btn btn-success mt-4" onClick={this.entrar}>Entrar</button>
                     <div>OU</div>
-                    <button className="btn btn-danger mt-2">Cadastre-se</button>
+                    <button className="btn btn-danger mt-2" onClick={this.Cadastrar}>Cadastre-se</button>
                 </Card>
             </div>
         );
     }
 }
 
-export default Login;
+export default withRouter( Login );
