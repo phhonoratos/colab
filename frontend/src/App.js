@@ -6,7 +6,9 @@ function App() {
   return (
     <>
       <NavBar />
-      <Routes />
+      <div className="container">
+        <Routes />
+      </div>
       <Footer />
     </>
   );

@@ -1,5 +1,6 @@
-import Card from 'components/Card';
 import React from 'react';
+import Card from 'components/Card';
+import { withRouter} from 'react-router-dom';
 
 class Cadastro extends React.Component {
 
@@ -21,6 +22,10 @@ class Cadastro extends React.Component {
 
     cadastrar = () => {
         console.log(this.state)
+    }
+
+    cancelar = () => {
+        this.props.history.push('/login')
     }
 
     render() {
@@ -131,7 +136,7 @@ class Cadastro extends React.Component {
                             placeholder="Confirme a senha"
                             name="senha" />
                     </div>
-                    <button className="btn btn-danger mt-4">Cancelar</button>
+                    <button className="btn btn-danger mt-4" onClick={this.cancelar}>Cancelar</button>
                     <button className="btn btn-success mt-4" onClick={this.cadastrar}>Cadastrar</button>
                 </Card>
             </div>
@@ -139,4 +144,4 @@ class Cadastro extends React.Component {
     }
 }
 
-export default Cadastro;
+export default withRouter(Cadastro);
