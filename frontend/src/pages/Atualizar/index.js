@@ -17,7 +17,8 @@ class Atualizar extends React.Component {
         cpf: '',
         pis: '',
         senha: '',
-        senhaRepeticao: ''
+        senhaRepeticao: '',
+        msgErro: null
     }
 
     cancelar = () => {
@@ -25,8 +26,26 @@ class Atualizar extends React.Component {
     }
 
     atualizar = () => {
-        alert('Usuario atualizado')
-        this.props.history.push('/home')
+        axios.put('http://localhost:8080/colaborators/7', {
+            nome: this.state.nome,
+            email: this.state.email,
+            pais: this.state.pais,
+            estado: this.state.estado,
+            municipio: this.state.municipio,
+            cep: this.state.cep,
+            rua: this.state.rua,
+            numero: this.state.numero,
+            complemento: this.state.complemento,
+            cpf: this.state.cpf,
+            pis: this.state.pis,
+            senha: this.state.senha,
+            senhaRepeticao: this.state.senhaRepeticao
+        }).then( response => {
+            alert('Usuário atualizado com sucesso')
+            this.props.history.push('/home')
+        }).catch( erro => {
+            this.setState({msgErro: erro.response.data})
+        })
     }
     
     removerCadastro = () => {
