@@ -4,6 +4,7 @@ import Login from 'pages/Login';
 
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Home from 'pages/Home';
+import Atualizar from 'pages/Atualizar';
 
 function Routes() {
     return (
@@ -12,6 +13,7 @@ function Routes() {
                 <Route path="/" component={Login} exact />
                 <Route path="/home" component={Home} exact />
                 <Route path="/cadastrar" component={Cadastro} />
+                <Route path="/atualizar" component={Atualizar} />
             </Switch>
         </BrowserRouter>
 
