@@ -5,6 +5,7 @@ import React from 'react'
 class Atualizar extends React.Component {
     
     state = {
+        id: '',
         nome: '',
         email: '',
         pais: '',
@@ -25,22 +26,48 @@ class Atualizar extends React.Component {
         this.props.history.push('/home')
     }
 
-    atualizar = () => {
-        axios.put('http://localhost:8080/colaborators/7', {
-            nome: this.state.nome,
-            email: this.state.email,
-            pais: this.state.pais,
-            estado: this.state.estado,
-            municipio: this.state.municipio,
-            cep: this.state.cep,
-            rua: this.state.rua,
-            numero: this.state.numero,
-            complemento: this.state.complemento,
-            cpf: this.state.cpf,
-            pis: this.state.pis,
-            senha: this.state.senha,
-            senhaRepeticao: this.state.senhaRepeticao
-        }).then( response => {
+    componentDidMount() {
+        const usuarioLogadoString = localStorage.getItem('_usuario_logado')
+        const usuarioLogado = JSON.parse(usuarioLogadoString)
+        
+        axios.get(`http://localhost:8080/colaborators/${usuarioLogado.id}`)
+            .then(response => {
+                this.setState({id: usuarioLogado.id})
+                this.setState({nome: usuarioLogado.nome})
+                this.setState({email: usuarioLogado.email})
+                this.setState({pais: usuarioLogado.pais})
+                this.setState({estado: usuarioLogado.estado})
+                this.setState({municipio: usuarioLogado.municipio})
+                this.setState({cep: usuarioLogado.cep})
+                this.setState({rua: usuarioLogado.rua})
+                this.setState({numero: usuarioLogado.numero})
+                this.setState({complemento: usuarioLogado.complemento})
+                this.setState({cpf: usuarioLogado.cpf})
+                this.setState({pis: usuarioLogado.pis})
+                this.setState({senha: usuarioLogado.senha})
+                this.setState({senhaRepeticao: usuarioLogado.senhaRepeticao})
+            }).catch(erro => {
+                console.erro(erro.response)
+            })
+        }
+        
+        atualizar = () => {
+            axios.put(`http://localhost:8080/colaborators/${this.state.id}`, {
+                nome: this.state.nome,
+                email: this.state.email,
+                pais: this.state.pais,
+                estado: this.state.estado,
+                municipio: this.state.municipio,
+                cep: this.state.cep,
+                rua: this.state.rua,
+                numero: this.state.numero,
+                complemento: this.state.complemento,
+                cpf: this.state.cpf,
+                pis: this.state.pis,
+                senha: this.state.senha,
+                senhaRepeticao: this.state.senhaRepeticao
+            }).then( response => {
+            localStorage.setItem('_usuario_logado', JSON.stringify(response.data))
             alert('Usuário atualizado com sucesso')
             this.props.history.push('/home')
         }).catch( erro => {
@@ -49,7 +76,8 @@ class Atualizar extends React.Component {
     }
     
     removerCadastro = () => {
-        axios.delete(`http://localhost:8080/colaborators/3`).then( response => {
+        axios.delete(`http://localhost:8080/colaborators/${this.state.id}`).then( response => {
+            localStorage.clear();
             this.props.history.push('/')
             console.log(response)
         })
