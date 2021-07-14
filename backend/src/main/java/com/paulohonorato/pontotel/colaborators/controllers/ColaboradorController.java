@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
+import com.paulohonorato.pontotel.colaborators.exceptions.ErroDeAutenticacao;
 import com.paulohonorato.pontotel.colaborators.services.ColaboradorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,16 @@ public class ColaboradorController {
     public ResponseEntity<List<ColaboradorDTO>> findAll() {
         List<ColaboradorDTO> list = service.findAll();
         return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/autenticar")
+    public ResponseEntity autenticar(@RequestBody ColaboradorDTO dto) {
+        try {
+            Colaborador colaboradorAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
+            return ResponseEntity.ok(colaboradorAutenticado);
+        } catch (ErroDeAutenticacao e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping
