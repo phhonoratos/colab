@@ -1,6 +1,7 @@
 package com.paulohonorato.pontotel.colaborators.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
@@ -31,6 +32,12 @@ public class ColaboradorController {
     public ResponseEntity<List<ColaboradorDTO>> findAll() {
         List<ColaboradorDTO> list = service.findAll();
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity buscaPorId(@PathVariable("id") Long idColaborador) {
+        Optional<Colaborador> colaborador = service.buscarPorId(idColaborador);
+        return ResponseEntity.ok(colaborador);
     }
 
     @PostMapping("/autenticar")
