@@ -1,12 +1,12 @@
 import Footer from "components/Footer";
 import NavBar from "components/NavBar";
-import Home from "pages/Home";
+import Routes from "main/Routes";
 
 function App() {
   return (
     <>
       <NavBar />
-      <Home />
+      <Routes />
       <Footer />
     </>
   );
