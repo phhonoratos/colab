@@ -15,7 +15,7 @@ class Login extends React.Component {
 
     render(){
         return (
-            <div className="teste">
+            <div className="container">
                 <Card title="Login">
                     <fieldset>
                         <div className="form-group mt-4">
