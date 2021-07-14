@@ -41,7 +41,7 @@ class Cadastro extends React.Component {
             alert('Cadastro realizado com sucesso!')
             this.props.history.push('/')
         }).catch( erro => {
-            this.setState({msgErro: erro.response.data})
+            this.setState({msgErro: erro.response})
         })
     }
 
