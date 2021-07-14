@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from 'components/Card';
 import { withRouter} from 'react-router-dom';
+import axios from 'axios';
 
 class Cadastro extends React.Component {
 
@@ -17,11 +18,31 @@ class Cadastro extends React.Component {
         cpf: '',
         pis: '',
         senha: '',
-        senhaRepeticao: ''
+        senhaRepeticao: '',
+        msgErro: null
     }
 
     cadastrar = () => {
-        console.log(this.state)
+        axios.post('http://localhost:8080/colaborators', {
+            nome: this.state.nome,
+            email: this.state.email,
+            pais: this.state.pais,
+            estado: this.state.estado,
+            municipio: this.state.municipio,
+            cep: this.state.cep,
+            rua: this.state.rua,
+            numero: this.state.numero,
+            complemento: this.state.complemento,
+            cpf: this.state.cpf,
+            pis: this.state.pis,
+            senha: this.state.senha,
+            senhaRepeticao: this.state.senhaRepeticao
+        }).then(response => {
+            alert('Cadastro realizado com sucesso!')
+            this.props.history.push('/')
+        }).catch( erro => {
+            this.setState({msgErro: erro.response.data})
+        })
     }
 
     cancelar = () => {

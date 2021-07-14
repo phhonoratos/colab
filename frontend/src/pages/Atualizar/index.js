@@ -20,13 +20,17 @@ class Atualizar extends React.Component {
         senhaRepeticao: ''
     }
 
+    cancelar = () => {
+        this.props.history.push('/home')
+    }
+
     atualizar = () => {
         alert('Usuario atualizado')
         this.props.history.push('/home')
     }
     
     removerCadastro = () => {
-        axios.delete('http://localhost:8080/colaborators/3').then( response => {
+        axios.delete(`http://localhost:8080/colaborators/3`).then( response => {
             this.props.history.push('/')
             console.log(response)
         })
@@ -141,7 +145,8 @@ class Atualizar extends React.Component {
                             name="senha" />
                     </div>
                     <button className="btn btn-danger" onClick={this.removerCadastro}>Remover cadastro</button>
-                    <button className="btn btn-primary" onClick={this.atualizar}>Atualizar</button>
+                    <button className="btn btn-primary" onClick={this.cancelar}>Cancelar</button>
+                    <button className="btn btn-success" onClick={this.atualizar}>Atualizar</button>
                 </Card>
             </div>
         )
