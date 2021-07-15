@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class Colaborador implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
+    
     private String nome;
     private String email;
     private String rua;
@@ -34,6 +37,8 @@ public class Colaborador implements Serializable {
     private String pais;
     private String cpf;
     private String pis;
+
+    @JsonIgnore
     private String senha;
 
     public static long getSerialverionuid() {
