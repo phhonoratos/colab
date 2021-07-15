@@ -11,6 +11,7 @@ import com.paulohonorato.pontotel.colaborators.services.ColaboradorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/colaborators")
 public class ColaboradorController {
+
+    @Autowired
+    private BCryptPasswordEncoder encrypt;
     
     @Autowired
     private ColaboradorService service;
@@ -52,19 +56,7 @@ public class ColaboradorController {
 
     @PostMapping
     public ResponseEntity cadastrar(@RequestBody ColaboradorDTO dto) {
-        Colaborador colaborador = new Colaborador();
-        colaborador.setNome(dto.getNome());
-        colaborador.setEmail(dto.getEmail());
-        colaborador.setPais(dto.getPais());
-        colaborador.setEstado(dto.getEstado());
-        colaborador.setMunicipio(dto.getMunicipio());
-        colaborador.setCep(dto.getCep());
-        colaborador.setRua(dto.getRua());
-        colaborador.setNumero(dto.getNumero());
-        colaborador.setComplemento(dto.getComplemento());
-        colaborador.setCpf(dto.getCpf());
-        colaborador.setPis(dto.getPis());
-        colaborador.setSenha(dto.getSenha());
+        Colaborador colaborador = converterToEntity(dto);
 
         try {
             Colaborador colaboradorSalvo = service.cadastrar(colaborador);
@@ -109,7 +101,7 @@ public class ColaboradorController {
         colaborador.setComplemento(dto.getComplemento());
         colaborador.setCpf(dto.getCpf());
         colaborador.setPis(dto.getPis());
-        colaborador.setSenha(dto.getSenha());
+        colaborador.setSenha(encrypt.encode(dto.getSenha()));
 
         return colaborador;
     }

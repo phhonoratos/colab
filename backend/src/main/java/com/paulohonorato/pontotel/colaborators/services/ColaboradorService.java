@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,22 +21,26 @@ public class ColaboradorService {
     @Autowired
     private ColaboradorRepository repository;
 
+    @Autowired
+    private BCryptPasswordEncoder encrypt;
+
     public List<ColaboradorDTO> findAll() {
         List<Colaborador> result = repository.findAll();
         return result.stream().map(x -> new ColaboradorDTO(x)).collect(Collectors.toList());
     }
 
     public Colaborador autenticar(String email, String senha) {
-        Optional<Colaborador> colaborador = repository.findByEmail(email);
+        Colaborador colaborador = repository.findByEmail(email);
 
-        if(!colaborador.isPresent()) {
+        if(colaborador == null) {
             throw new ErroDeAutenticacao("Usuário não encontrado para o email informado.");
         }
-        if(!colaborador.get().getSenha().equals(senha)) {
+        if(!encrypt.matches(senha, colaborador.getSenha())) {
             throw new ErroDeAutenticacao("Senha inválida");
+            
         }
 
-        return colaborador.get();
+        return colaborador;
     }
 
     public Colaborador cadastrar(Colaborador colaborador) {
