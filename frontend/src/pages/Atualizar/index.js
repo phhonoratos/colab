@@ -1,3 +1,4 @@
+import LocalStorageService from 'app/service/localStorageService';
 import axios from 'axios';
 import Card from 'components/Card';
 import React from 'react'
@@ -27,8 +28,7 @@ class Atualizar extends React.Component {
     }
 
     componentDidMount() {
-        const usuarioLogadoString = localStorage.getItem('_usuario_logado')
-        const usuarioLogado = JSON.parse(usuarioLogadoString)
+        const usuarioLogado = LocalStorageService.obterItem(`_usuario_logado`)
         
         axios.get(`http://localhost:8080/colaborators/${usuarioLogado.id}`)
             .then(response => {
@@ -50,8 +50,55 @@ class Atualizar extends React.Component {
                 console.erro(erro.response)
             })
         }
+
+        validar(){
+            const msgs = [];
+    
+            if(!this.state.nome){
+                msgs.push('O campo NOME é obrigatório.')
+            }
+    
+            if(!this.state.email) {
+                msgs.push('O campo EMAIL é obrigatório.')
+            } else if(!this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/)) {
+                msgs.push('Informe um EMAIL válido.')
+            }
+    
+            if(!this.state.cep) {
+                msgs.push('O campo CEP é obrigatório.')
+            }
+    
+            if(!this.state.numero) {
+                msgs.push('O campo NÚMERO é obrigatório.')
+            }
+    
+            if(!this.state.cpf) {
+                msgs.push('O campo CPF é obrigatório.')
+            }
+    
+            if(!this.state.pis) {
+                msgs.push('O campo PIS é obrigatório.')
+            }
+    
+            if(!this.state.senha || !this.state.senhaRepeticao) {
+                msgs.push('Informe ou confirme a SENHA.')
+            } else if(this.state.senha !== this.state.senhaRepeticao) {
+                msgs.push('As SENHAS não conferem. Por favor digite novamente e confirme.')
+            }
+    
+            return msgs;
+        }
         
         atualizar = () => {
+            const msgs = this.validar();
+
+            if(msgs && msgs.length > 0) {
+                msgs.forEach((msg, index) => {
+                    alert(msg)
+                });
+                return false;
+            }
+
             axios.put(`http://localhost:8080/colaborators/${this.state.id}`, {
                 nome: this.state.nome,
                 email: this.state.email,
@@ -67,17 +114,17 @@ class Atualizar extends React.Component {
                 senha: this.state.senha,
                 senhaRepeticao: this.state.senhaRepeticao
             }).then( response => {
-            localStorage.setItem('_usuario_logado', JSON.stringify(response.data))
-            alert('Usuário atualizado com sucesso')
-            this.props.history.push('/home')
-        }).catch( erro => {
-            this.setState({msgErro: erro.response.data})
-        })
+                LocalStorageService.addItem('_usuario_logado', response.data)
+                alert('Usuário atualizado com sucesso')
+                this.props.history.push('/home')
+            }).catch( erro => {
+                this.setState({msgErro: erro.response.data})
+            })
     }
     
     removerCadastro = () => {
         axios.delete(`http://localhost:8080/colaborators/${this.state.id}`).then( response => {
-            localStorage.clear();
+            LocalStorageService.limparStorage();
             this.props.history.push('/')
             console.log(response)
         })
@@ -92,104 +139,91 @@ class Atualizar extends React.Component {
                             value={this.state.nome}
                             onChange={e => this.setState({ nome: e.target.value })}
                             className="form-control"
-                            placeholder="Nome completo"
-                            name="nome" />
+                            placeholder="Nome completo" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="email"
                             value={this.state.email}
                             onChange={e => this.setState({ email: e.target.value })}
                             className="form-control"
-                            placeholder="Email"
-                            name="email" />
+                            placeholder="Email" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="number"
                             value={this.state.cep}
                             onChange={e => this.setState({ cep: e.target.value })}
                             className="form-control"
-                            placeholder="CEP"
-                            name="cep" />
+                            placeholder="CEP (somente números)" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.rua}
                             onChange={e => this.setState({ rua: e.target.value })}
                             className="form-control"
-                            placeholder="Logradouro / Rua"
-                            name="rua" />
+                            placeholder="Logradouro / Rua" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="number"
                             value={this.state.numero}
                             onChange={e => this.setState({ numero: e.target.value })}
                             className="form-control"
-                            placeholder="Número"
-                            name="numero" />
+                            placeholder="Número" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.complemento}
                             onChange={e => this.setState({ complemento: e.target.value })}
                             className="form-control"
-                            placeholder="Complemento"
-                            name="complemento" />
+                            placeholder="Complemento" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.municipio}
                             onChange={e => this.setState({ municipio: e.target.value })}
                             className="form-control"
-                            placeholder="Cidade"
-                            name="municipio" />
+                            placeholder="Cidade" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.estado}
                             onChange={e => this.setState({ estado: e.target.value })}
                             className="form-control"
-                            placeholder="UF / Estado"
-                            name="estado" />
+                            placeholder="UF / Estado" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.pais}
                             onChange={e => this.setState({ pais: e.target.value })}
                             className="form-control"
-                            placeholder="País"
-                            name="pais" />
+                            placeholder="País" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="number"
                             value={this.state.cpf}
                             onChange={e => this.setState({ cpf: e.target.value })}
                             className="form-control"
-                            placeholder="CPF"
-                            name="cpf" />
+                            placeholder="CPF (somente números)" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="number"
                             value={this.state.pis}
                             onChange={e => this.setState({ pis: e.target.value })}
                             className="form-control"
-                            placeholder="PIS"
-                            name="pis" />
+                            placeholder="PIS (somente números)" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="password"
                             value={this.state.senha}
                             onChange={e => this.setState({ senha: e.target.value })}
                             className="form-control"
-                            placeholder="Senha"
-                            name="senha" />
+                            placeholder="Senha" />
                     </div>
                     <div className="form-group mt-4">
-                        <input type="text"
+                        <input type="password"
                             value={this.state.senhaRepeticao}
                             onChange={e => this.setState({ senhaRepeticao: e.target.value })}
                             className="form-control"
-                            placeholder="Confirme a senha"
-                            name="senha" />
+                            placeholder="Confirme a senha" />
                     </div>
                     <button className="btn btn-danger" onClick={this.removerCadastro}>Remover cadastro</button>
                     <button className="btn btn-primary" onClick={this.cancelar}>Cancelar</button>

@@ -8,6 +8,10 @@ class LocalStorageService {
         const item = localStorage.getItem(chave);
         return JSON.parse(item)
     }
+
+    static limparStorage(){
+        localStorage.clear()
+    }
 }
 
 export default LocalStorageService;
