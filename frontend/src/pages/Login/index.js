@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from 'components/Card'
 import axios from 'axios'
+import LocalStorageService from 'app/service/localStorageService'
 
 class Login extends React.Component {
 
@@ -15,7 +16,7 @@ class Login extends React.Component {
             email: this.state.email,
             senha: this.state.senha
         }).then( response => {
-            localStorage.setItem('_usuario_logado', JSON.stringify(response.data))
+            LocalStorageService.addItem('_usuario_logado', response.data)
             this.props.history.push('/home')
         }).catch( erro => {
             this.setState({msgErro: erro.response.data})
