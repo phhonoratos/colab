@@ -160,7 +160,8 @@ class Atualizar extends React.Component {
                             value={this.state.rua}
                             onChange={e => this.setState({ rua: e.target.value })}
                             className="form-control"
-                            placeholder="Logradouro / Rua" />
+                            placeholder="Logradouro / Rua"
+                            readOnly />
                     </div>
                     <div className="form-group mt-4">
                         <input type="number"
@@ -181,21 +182,24 @@ class Atualizar extends React.Component {
                             value={this.state.municipio}
                             onChange={e => this.setState({ municipio: e.target.value })}
                             className="form-control"
-                            placeholder="Cidade" />
+                            placeholder="Cidade"
+                            readOnly />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.estado}
                             onChange={e => this.setState({ estado: e.target.value })}
                             className="form-control"
-                            placeholder="UF / Estado" />
+                            placeholder="UF / Estado"
+                            readOnly />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.pais}
                             onChange={e => this.setState({ pais: e.target.value })}
                             className="form-control"
-                            placeholder="País" />
+                            placeholder="País"
+                            readOnly />
                     </div>
                     <div className="form-group mt-4">
                         <input type="number"
