@@ -2,6 +2,7 @@ import React from 'react';
 import Card from 'components/Card';
 import { withRouter} from 'react-router-dom';
 import axios from 'axios';
+import './styles.css'
 
 class Cadastro extends React.Component {
 
@@ -99,89 +100,85 @@ class Cadastro extends React.Component {
     render() {
         return (
             <div className="container">
-                <Card title="Cadastro de colaborador">
-                    <div className="form-group mt-4">
+                <Card title="Novo cadastro de colaborador" className="cardCadastro">
+                    <div className="form-group mt-4 pack">
                         <input type="text"
                             value={this.state.nome}
                             onChange={e => this.setState({ nome: e.target.value })}
-                            className="form-control"
+                            className="form-control nome"
                             placeholder="Nome completo" />
-                    </div>
-                    <div className="form-group mt-4">
                         <input type="email"
                             value={this.state.email}
                             onChange={e => this.setState({ email: e.target.value })}
-                            className="form-control"
+                            className="form-control email"
                             placeholder="Email" />
+                        <input type="number"
+                            value={this.state.cpf}
+                            onChange={e => this.setState({ cpf: e.target.value })}
+                            className="form-control cpf"
+                            placeholder="CPF (somente números)" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="number"
                             value={this.state.cep}
                             onChange={e => this.setState({ cep: e.target.value })}
-                            className="form-control"
+                            className="form-control cep"
                             placeholder="CEP (somente números)" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.rua}
                             onChange={e => this.setState({ rua: e.target.value })}
-                            className="form-control"
+                            className="form-control rua"
                             placeholder="Logradouro / Rua" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="number"
                             value={this.state.numero}
                             onChange={e => this.setState({ numero: e.target.value })}
-                            className="form-control"
+                            className="form-control numero"
                             placeholder="Número" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.complemento}
                             onChange={e => this.setState({ complemento: e.target.value })}
-                            className="form-control"
+                            className="form-control complemento"
                             placeholder="Complemento" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.municipio}
                             onChange={e => this.setState({ municipio: e.target.value })}
-                            className="form-control"
+                            className="form-control cidade"
                             placeholder="Cidade" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.estado}
                             onChange={e => this.setState({ estado: e.target.value })}
-                            className="form-control"
+                            className="form-control estado"
                             placeholder="UF / Estado" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="text"
                             value={this.state.pais}
                             onChange={e => this.setState({ pais: e.target.value })}
-                            className="form-control"
+                            className="form-control pais"
                             placeholder="País" />
-                    </div>
-                    <div className="form-group mt-4">
-                        <input type="number"
-                            value={this.state.cpf}
-                            onChange={e => this.setState({ cpf: e.target.value })}
-                            className="form-control"
-                            placeholder="CPF (somente números)" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="number"
                             value={this.state.pis}
                             onChange={e => this.setState({ pis: e.target.value })}
-                            className="form-control"
+                            className="form-control pis"
                             placeholder="PIS (somente números)" />
                     </div>
                     <div className="form-group mt-4">
                         <input type="password"
                             value={this.state.senha}
                             onChange={e => this.setState({ senha: e.target.value })}
-                            className="form-control"
+                            className="form-control senha"
                             placeholder="Senha" />
                     </div>
                     <div className="form-group mt-4">
@@ -189,7 +186,7 @@ class Cadastro extends React.Component {
                             value={this.state.senhaRepeticao}
                             onChange={e => this.setState({ senhaRepeticao: e.target.value })}
                             className="form-control"
-                            placeholder="Confirme a senha" />
+                            placeholder="Confirme a senha senha" />
                     </div>
                     <button className="btn btn-danger mt-4" onClick={this.cancelar}>Cancelar</button>
                     <button className="btn btn-success mt-4" onClick={this.cadastrar}>Cadastrar</button>

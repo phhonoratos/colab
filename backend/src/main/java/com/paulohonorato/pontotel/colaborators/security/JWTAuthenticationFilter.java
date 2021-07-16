@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paulohonorato.pontotel.colaborators.dtos.CredenciaisDTO;
+import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
+import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +23,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    @Autowired
+    private ColaboradorRepository repository;
 
     private AuthenticationManager authenticationManager;
 

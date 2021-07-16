@@ -2,6 +2,7 @@ import React from 'react'
 import Card from 'components/Card'
 import axios from 'axios'
 import LocalStorageService from 'app/service/localStorageService'
+import './styles.css'
 
 class Login extends React.Component {
 
@@ -12,15 +13,16 @@ class Login extends React.Component {
     }
 
     entrar = () => {
-        axios.post('http://localhost:8080/colaborators/autenticar', {
+        axios.post('http://localhost:8080/login', {
             email: this.state.email,
             senha: this.state.senha
         }).then( response => {
-            LocalStorageService.addItem('_usuario_logado', response.data)
+            // LocalStorageService.addItem('_usuario_logado', response.data)
+            console.log("aaaaaaaaaaaa", response.data)
             this.props.history.push('/home')
         }).catch( erro => {
-            this.setState({msgErro: erro.response.data})
-            console.log(erro.response.data)
+            // this.setState({msgErro: erro.response.data})
+            console.log(erro.response)
         })
     }
 
@@ -32,8 +34,8 @@ class Login extends React.Component {
         return (
             <div className="container">
                 <div className="home-content">
-                    <h1>Olá Visitante!</h1>
-                    <Card title="Login">
+                    <h3 className="mt-3">Olá Visitante!</h3>
+                    <Card title="Login" className="card">
                         <div>
                             <span>{this.state.msgErro}</span>
                         </div>
@@ -53,9 +55,11 @@ class Login extends React.Component {
                                 placeholder="Password" />
                         </div>
                     </fieldset>
-                    <button className="btn btn-success mt-4" onClick={this.entrar}>Entrar</button>
-                    <div>OU</div>
-                    <button className="btn btn-danger mt-2" onClick={this.Cadastrar}>Cadastre-se</button>
+                    <div className="botoes">
+                        <button className="btn btn-success" onClick={this.entrar}>Entrar</button>
+                        <h5 className="mt-4">OU</h5>
+                        <button className="btn btn-danger" onClick={this.Cadastrar}>Cadastre-se</button>
+                    </div>
                 </Card>
                 </div>
             </div>

@@ -44,14 +44,10 @@ public class ColaboradorController {
         return ResponseEntity.ok(colaborador);
     }
 
-    @PostMapping("/autenticar")
-    public ResponseEntity autenticar(@RequestBody ColaboradorDTO dto) {
-        try {
-            Colaborador colaboradorAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
-            return ResponseEntity.ok(colaboradorAutenticado);
-        } catch (ErroDeAutenticacao e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/login")
+    public ResponseEntity<Colaborador> autenticar(@RequestBody ColaboradorDTO dto) {
+        Colaborador colaboradorAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
+        return ResponseEntity.ok().body(colaboradorAutenticado);
     }
 
     @PostMapping
