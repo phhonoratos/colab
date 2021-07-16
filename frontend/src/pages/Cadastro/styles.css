@@ -1,0 +1,31 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardCadastro {
+    width: 1050px;
+    height: 500px;
+    margin-bottom: 20px;
+}
+
+.nome {
+    width: 400px;
+}
+
+.email {
+    width: 250px;
+}
+
+.cpf {
+    width: 225px;
+}
+
+.pack {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+}

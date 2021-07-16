@@ -20,7 +20,7 @@ class Home extends React.Component {
     componentDidMount() {
         const usuarioLogado = LocalStorageService.obterItem('_usuario_logado')
         
-        axios.get(`http://localhost:8080/colaborators/${usuarioLogado.id}`)
+        axios.get(`http://localhost:8080/colaborators/1`)
             .then(response => {
                 this.setState({nome: response.data.nome})
             }).catch(erro => {

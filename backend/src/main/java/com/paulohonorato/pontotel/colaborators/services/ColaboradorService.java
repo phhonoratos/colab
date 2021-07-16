@@ -37,7 +37,6 @@ public class ColaboradorService {
         }
         if(!encrypt.matches(senha, colaborador.getSenha())) {
             throw new ErroDeAutenticacao("Senha inválida");
-            
         }
 
         return colaborador;
