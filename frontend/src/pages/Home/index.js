@@ -39,8 +39,10 @@ class Home extends React.Component {
         return (
             <div>
                 <h1>Olá {this.state.nome}!</h1>
-                <button className="btn btn-primary" onClick={this.atualizar}>Atualizar Dados</button>                
-                <button className="btn btn-danger" onClick={this.logout}>Logout</button>
+                <div className="d-flex flex-column">
+                    <button className="btn btn-primary" onClick={this.atualizar}>Atualizar Dados</button>                
+                    <button className="btn btn-danger" onClick={this.logout}>Logout</button>
+                </div>
             </div>
         )
     }
