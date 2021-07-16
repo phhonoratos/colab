@@ -1,6 +1,7 @@
 package com.paulohonorato.pontotel.colaborators.services;
 
 import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
+import com.paulohonorato.pontotel.colaborators.validations.Validacoes;
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 import com.paulohonorato.pontotel.colaborators.exceptions.ErroDeAutenticacao;
@@ -24,32 +25,27 @@ public class ColaboradorService {
     @Autowired
     private BCryptPasswordEncoder encrypt;
 
+    @Autowired
+    private Validacoes validar;
+
     public List<ColaboradorDTO> findAll() {
         List<Colaborador> result = repository.findAll();
         return result.stream().map(x -> new ColaboradorDTO(x)).collect(Collectors.toList());
     }
 
-    public Colaborador autenticar(String email, String senha) {
-        Colaborador colaborador = repository.findByEmail(email);
-
-        if(colaborador == null) {
-            throw new ErroDeAutenticacao("Usuário não encontrado para o email informado.");
-        }
-        if(!encrypt.matches(senha, colaborador.getSenha())) {
-            throw new ErroDeAutenticacao("Senha inválida");
-        }
-
+    public ColaboradorDTO acessar(String email) {
+        ColaboradorDTO colaborador = repository.findByEmail(email);
         return colaborador;
     }
 
     public Colaborador cadastrar(Colaborador colaborador) {
-        validarCadastro(colaborador);
+        validar.cadastro(colaborador);
         return repository.save(colaborador);
     }
 
     public Colaborador atualizar(Colaborador colaborador) {
         Objects.requireNonNull(colaborador.getId());
-        ValidarAtualizacao(colaborador);
+        validar.atualizacao(colaborador);
         return repository.save(colaborador);
     }
 
@@ -62,37 +58,37 @@ public class ColaboradorService {
         return repository.findById(id);
     }
 
-    public void validarCadastro(Colaborador colaborador) {
-        if(repository.existsByEmail(colaborador.getEmail())) {
-            throw new RegraDeNegocioException("Já existe um usuário cadastrado com este email.");
-        }
-        if(repository.existsByCpf(colaborador.getCpf())) {
-            throw new RegraDeNegocioException("Já existe um usuário cadastrado com este cpf.");
-        }
-        if(repository.existsByPis(colaborador.getPis())) {
-            throw new RegraDeNegocioException("Já existe um usuário cadastrado com este pis.");
-        }
-    }
+    // public void validarCadastro(Colaborador colaborador) {
+    //     if(repository.existsByEmail(colaborador.getEmail())) {
+    //         throw new RegraDeNegocioException("Já existe um usuário cadastrado com este email.");
+    //     }
+    //     if(repository.existsByCpf(colaborador.getCpf())) {
+    //         throw new RegraDeNegocioException("Já existe um usuário cadastrado com este cpf.");
+    //     }
+    //     if(repository.existsByPis(colaborador.getPis())) {
+    //         throw new RegraDeNegocioException("Já existe um usuário cadastrado com este pis.");
+    //     }
+    // }
 
-    public void ValidarAtualizacao(Colaborador colaborador) {
-        if(colaborador.getNome() == null || colaborador.getNome().trim().equals("")) {
-            throw new RegraDeNegocioException("Informe um NOME com pelo menos 4 letras.");
-        }
-        if(colaborador.getCep() == null || colaborador.getCep().trim().equals("")) {
-            throw new RegraDeNegocioException("Informe um CEP válido.");
-        }
-        if(colaborador.getNumero() == null || colaborador.getNumero().trim().equals("")) {
-            throw new RegraDeNegocioException("Informe um NÚMERO de endereço válido.");
-        }
-        if(colaborador.getCpf() == null || colaborador.getCpf().trim().equals("")) {
-            throw new RegraDeNegocioException("Informe um CPF válido.");
-        }
-        if(colaborador.getPis() == null || colaborador.getPis().trim().equals("")) {
-            throw new RegraDeNegocioException("Informe um PIS válido.");
-        }
-        if(colaborador.getSenha() == null || colaborador.getSenha().trim().equals("")) {
-            throw new RegraDeNegocioException("Informe uma SENHA.");
-        }
-    }
+    // public void ValidarAtualizacao(Colaborador colaborador) {
+    //     if(colaborador.getNome() == null || colaborador.getNome().trim().equals("")) {
+    //         throw new RegraDeNegocioException("Informe um NOME com pelo menos 4 letras.");
+    //     }
+    //     if(colaborador.getCep() == null || colaborador.getCep().trim().equals("")) {
+    //         throw new RegraDeNegocioException("Informe um CEP válido.");
+    //     }
+    //     if(colaborador.getNumero() == null || colaborador.getNumero().trim().equals("")) {
+    //         throw new RegraDeNegocioException("Informe um NÚMERO de endereço válido.");
+    //     }
+    //     if(colaborador.getCpf() == null || colaborador.getCpf().trim().equals("")) {
+    //         throw new RegraDeNegocioException("Informe um CPF válido.");
+    //     }
+    //     if(colaborador.getPis() == null || colaborador.getPis().trim().equals("")) {
+    //         throw new RegraDeNegocioException("Informe um PIS válido.");
+    //     }
+    //     if(colaborador.getSenha() == null || colaborador.getSenha().trim().equals("")) {
+    //         throw new RegraDeNegocioException("Informe uma SENHA.");
+    //     }
+    // }
 
 }

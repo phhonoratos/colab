@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.paulohonorato.pontotel.colaborators.security.JWTAuthenticationFilter;
 import com.paulohonorato.pontotel.colaborators.security.JWTUtil;
+import com.paulohonorato.pontotel.colaborators.validations.Validacoes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -63,5 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public Validacoes validacoes() {
+		return new Validacoes();
 	}
 }

@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
-import com.paulohonorato.pontotel.colaborators.exceptions.ErroDeAutenticacao;
 import com.paulohonorato.pontotel.colaborators.services.ColaboradorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,18 +43,21 @@ public class ColaboradorController {
         return ResponseEntity.ok(colaborador);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Colaborador> autenticar(@RequestBody ColaboradorDTO dto) {
-        Colaborador colaboradorAutenticado = service.autenticar(dto.getEmail(), dto.getSenha());
-        return ResponseEntity.ok().body(colaboradorAutenticado);
+    @PostMapping("/acessar")
+    public ResponseEntity autenticar(@RequestBody ColaboradorDTO dto) {
+        try {
+            ColaboradorDTO colaboradorAutenticado = service.acessar(dto.getEmail());
+            return ResponseEntity.ok().body(colaboradorAutenticado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping
     public ResponseEntity cadastrar(@RequestBody ColaboradorDTO dto) {
         Colaborador colaborador = converterToEntity(dto);
-
         try {
-            Colaborador colaboradorSalvo = service.cadastrar(colaborador);
+            ColaboradorDTO colaboradorSalvo = converterToDto(service.cadastrar(colaborador));
             return new ResponseEntity(colaboradorSalvo, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -67,9 +69,9 @@ public class ColaboradorController {
         return service.buscarPorId(id).map(entity -> {
             try {
                 Colaborador colaborador = converterToEntity(dto);
-                colaborador.setId(entity.getId());
-                service.atualizar(colaborador);
-                return ResponseEntity.ok(colaborador);
+                colaborador.setId(entity.getId());                
+                ColaboradorDTO colab = converterToDto(service.atualizar(colaborador));
+                return ResponseEntity.ok(colab);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e.getMessage());
             }
@@ -98,6 +100,24 @@ public class ColaboradorController {
         colaborador.setCpf(dto.getCpf());
         colaborador.setPis(dto.getPis());
         colaborador.setSenha(encrypt.encode(dto.getSenha()));
+
+        return colaborador;
+    }
+
+    public ColaboradorDTO converterToDto(Colaborador colab) {
+        ColaboradorDTO colaborador = new ColaboradorDTO();
+        colaborador.setNome(colab.getNome());
+        colaborador.setEmail(colab.getEmail());
+        colaborador.setPais(colab.getPais());
+        colaborador.setEstado(colab.getEstado());
+        colaborador.setMunicipio(colab.getMunicipio());
+        colaborador.setCep(colab.getCep());
+        colaborador.setRua(colab.getRua());
+        colaborador.setNumero(colab.getNumero());
+        colaborador.setComplemento(colab.getComplemento());
+        colaborador.setCpf(colab.getCpf());
+        colaborador.setPis(colab.getPis());
+        colaborador.setSenha(encrypt.encode(colab.getSenha()));
 
         return colaborador;
     }

@@ -1,5 +1,6 @@
 package com.paulohonorato.pontotel.colaborators.services;
 
+import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
 import com.paulohonorato.pontotel.colaborators.security.ColaboradorSS;
@@ -18,7 +19,7 @@ public class ColaboradorDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Colaborador colaborador = repository.findByEmail(email);
+        ColaboradorDTO colaborador = repository.findByEmail(email);
         if(colaborador == null) {
             throw new UsernameNotFoundException(email);
         }

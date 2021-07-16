@@ -1,8 +1,8 @@
 import React from 'react'
 import Card from 'components/Card'
 import axios from 'axios'
-import LocalStorageService from 'app/service/localStorageService'
 import './styles.css'
+import LocalStorageService from 'app/service/localStorageService'
 
 class Login extends React.Component {
 
@@ -17,13 +17,14 @@ class Login extends React.Component {
             email: this.state.email,
             senha: this.state.senha
         }).then( response => {
-            // LocalStorageService.addItem('_usuario_logado', response.data)
-            console.log("aaaaaaaaaaaa", response.data)
+            LocalStorageService.addItem('email', this.state.email)
             this.props.history.push('/home')
         }).catch( erro => {
+            alert('Email ou senha inválidos')
             // this.setState({msgErro: erro.response.data})
             console.log(erro.response)
         })
+
     }
 
     Cadastrar = () => {
