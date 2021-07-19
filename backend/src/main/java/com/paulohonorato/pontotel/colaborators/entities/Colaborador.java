@@ -11,12 +11,14 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tb_colaborators")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Colaborador implements Serializable {
