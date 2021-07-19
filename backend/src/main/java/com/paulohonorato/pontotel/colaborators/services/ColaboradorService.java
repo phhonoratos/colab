@@ -4,8 +4,6 @@ import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepositor
 import com.paulohonorato.pontotel.colaborators.validations.Validacoes;
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
-import com.paulohonorato.pontotel.colaborators.exceptions.ErroDeAutenticacao;
-import com.paulohonorato.pontotel.colaborators.exceptions.RegraDeNegocioException;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,9 +18,6 @@ public class ColaboradorService {
 
     @Autowired
     private ColaboradorRepository repository;
-
-    @Autowired
-    private BCryptPasswordEncoder encrypt;
 
     @Autowired
     private Validacoes validar;

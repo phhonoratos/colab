@@ -9,10 +9,12 @@ import javax.validation.constraints.Size;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ColaboradorDTO implements Serializable {

@@ -27,19 +27,19 @@ public class Validacoes {
         if(colaborador.getNome() == null || colaborador.getNome().trim().equals("")) {
             throw new RegraDeNegocioException("Informe um NOME com pelo menos 4 letras.");
         }
-        if(colaborador.getCep() == null || colaborador.getCep().trim().equals("")) {
+        if(colaborador.getCep() == null || colaborador.getCep().trim().equals("") || colaborador.getCep().length() < 8) {
             throw new RegraDeNegocioException("Informe um CEP válido.");
         }
         if(colaborador.getNumero() == null || colaborador.getNumero().trim().equals("")) {
             throw new RegraDeNegocioException("Informe um NÚMERO de endereço válido.");
         }
-        if(colaborador.getCpf() == null || colaborador.getCpf().trim().equals("")) {
+        if(colaborador.getCpf() == null || colaborador.getCpf().trim().equals("") || colaborador.getCpf().length() < 11) {
             throw new RegraDeNegocioException("Informe um CPF válido.");
         }
-        if(colaborador.getPis() == null || colaborador.getPis().trim().equals("")) {
+        if(colaborador.getPis() == null || colaborador.getPis().trim().equals("") || colaborador.getPis().length() < 11) {
             throw new RegraDeNegocioException("Informe um PIS válido.");
         }
-        if(colaborador.getSenha() == null || colaborador.getSenha().trim().equals("")) {
+        if(colaborador.getSenha() == null || colaborador.getSenha().trim().equals("") || colaborador.getSenha().length() < 8) {
             throw new RegraDeNegocioException("Informe uma SENHA.");
         }
     }
