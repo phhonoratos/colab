@@ -1,6 +1,7 @@
 import LocalStorageService from 'app/service/localStorageService';
 import axios from 'axios';
 import React from 'react'
+import Cookies from 'js-cookie'
 
 class Home extends React.Component {
 
@@ -14,7 +15,7 @@ class Home extends React.Component {
 
     logout = () => {
         this.props.history.push('/')
-        localStorage.clear();
+        Cookies.remove('_usuario_logado')
     }
 
     componentDidMount() {
@@ -22,16 +23,16 @@ class Home extends React.Component {
         axios.post('http://localhost:8080/colaborators/acessar', {
             email: emailAutenticado
         }).then( response => {
-            LocalStorageService.addItem('_usuario_logado', response.data)
+            Cookies.set('_usuario_logado', `${JSON.stringify(response.data)}`, {expires: 1})
             axios.get(`http://localhost:8080/colaborators/${response.data.id}`)
-            .then(response => {
-                this.setState({nome: response.data.nome})
-            }).catch(erro => {
-                console.log('errooooo', erro.response)
-            })
+                .then(response => {
+                    this.setState({nome: response.data.nome})
+                }).catch(erro => {
+                    this.setState({msgErro: erro.response})
+                    console.log('errooooo', erro.response)
+                })
         }).catch( erro => {
-            // this.setState({msgErro: erro.response.data})
-            console.log(erro.response)
+            this.setState({msgErro: erro.response})
         })
     }
 
