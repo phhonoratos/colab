@@ -2,6 +2,7 @@ import LocalStorageService from 'app/service/localStorageService';
 import axios from 'axios';
 import { Field, Formik } from 'formik';
 import React from 'react'
+import Cookies from 'js-cookie'
 
 class Atualizar extends React.Component {
     
@@ -24,26 +25,26 @@ class Atualizar extends React.Component {
     }
     
     componentDidMount() {
-        const usuarioLogado = LocalStorageService.obterItem(`_usuario_logado`)
-        
-        axios.get(`http://localhost:8080/colaborators/${usuarioLogado.id}`)
+        const colaborador = Cookies.get('_usuario_logado')
+        const colabJson = JSON.parse(colaborador)
+        axios.get(`http://localhost:8080/colaborators/${colabJson.id}`)
         .then(response => {
-            this.setState({id: usuarioLogado.id})
-            this.setState({nome: usuarioLogado.nome})
-            this.setState({email: usuarioLogado.email})
-            this.setState({pais: usuarioLogado.pais})
-            this.setState({estado: usuarioLogado.estado})
-            this.setState({municipio: usuarioLogado.municipio})
-                this.setState({cep: usuarioLogado.cep})
-                this.setState({rua: usuarioLogado.rua})
-                this.setState({numero: usuarioLogado.numero})
-                this.setState({complemento: usuarioLogado.complemento})
-                this.setState({cpf: usuarioLogado.cpf})
-                this.setState({pis: usuarioLogado.pis})
+            this.setState({id: colabJson.id})
+            this.setState({nome: colabJson.nome})
+            this.setState({email: colabJson.email})
+            this.setState({pais: colabJson.pais})
+            this.setState({estado: colabJson.estado})
+            this.setState({municipio: colabJson.municipio})
+                this.setState({cep: colabJson.cep})
+                this.setState({rua: colabJson.rua})
+                this.setState({numero: colabJson.numero})
+                this.setState({complemento: colabJson.complemento})
+                this.setState({cpf: colabJson.cpf})
+                this.setState({pis: colabJson.pis})
             }).catch(erro => {
                 console.erro(erro.response)
             })
-        }
+    }
              
     cancelar = () => {
         this.props.history.push('/home')
@@ -129,7 +130,7 @@ class Atualizar extends React.Component {
             senha: this.state.senha,
             senhaRepeticao: this.state.senhaRepeticao
         }).then( response => {
-            LocalStorageService.addItem('_usuario_logado', response.data)
+            Cookies.set('_usuario_logado', `${JSON.stringify(response.data)}`)
             alert('Usuário atualizado com sucesso')
             this.props.history.push('/home')
         }).catch( erro => {
@@ -139,7 +140,7 @@ class Atualizar extends React.Component {
     
     removerCadastro = () => {
         axios.delete(`http://localhost:8080/colaborators/${this.state.id}`).then( response => {
-            LocalStorageService.limparStorage();
+            Cookies.remove('_usuario_logado')
             this.props.history.push('/')
             console.log(response)
         })
@@ -234,8 +235,9 @@ class Atualizar extends React.Component {
                                     placeholder="Confirme a senha" />
                             </div>
                             <div className="pack">
-                                <button className="btn btn-danger mt-4 cancelar" onClick={this.cancelar}>Cancelar</button>
-                                <button className="btn btn-success mt-4" onClick={this.cadastrar}>Cadastrar</button>
+                                <button className="btn btn-danger mt-4 cancelar" onClick={this.removerCadastro}>Remover cadastro</button>
+                                <button className="btn btn-primary mt-4" onClick={this.cancelar}>Cancelar</button>
+                                <button className="btn btn-success mt-4" onClick={this.atualizar}>Atualizar</button>
                             </div>
                         </div>
                     </div>
