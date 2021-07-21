@@ -22,6 +22,11 @@ public class ColaboradorService {
     @Autowired
     private Validacoes validar;
 
+    public ColaboradorService(ColaboradorRepository repository) {
+        super();
+        this.repository = repository;
+    }
+
     public List<ColaboradorDTO> findAll() {
         List<Colaborador> result = repository.findAll();
         return result.stream().map(x -> new ColaboradorDTO(x)).collect(Collectors.toList());

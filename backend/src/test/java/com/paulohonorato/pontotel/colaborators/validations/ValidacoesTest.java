@@ -4,23 +4,27 @@ import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
 import com.paulohonorato.pontotel.colaborators.exceptions.RegraDeNegocioException;
 import com.paulohonorato.pontotel.colaborators.repositories.ColaboradorRepository;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 public class ValidacoesTest {
-	
-    @Autowired
+
 	Validacoes validar;
 
-    @Autowired
+    @MockBean
 	ColaboradorRepository repository;
+
+    @Before
+    public void setUp() {
+        validar = new Validacoes(repository);
+    }
 
     public static Colaborador criarColaborador() {
         Colaborador colaborador = Colaborador.builder()
@@ -42,40 +46,37 @@ public class ValidacoesTest {
 
 	@Test(expected = Test.None.class)
     public void deveValidarOCadastro() {
-        repository.deleteAll();
         Colaborador colaborador = criarColaborador();
+        Mockito.when(repository.existsByEmail(Mockito.anyString())).thenReturn(false);
+        Mockito.when(repository.existsByCpf(Mockito.anyString())).thenReturn(false);
+        Mockito.when(repository.existsByPis(Mockito.anyString())).thenReturn(false);
         validar.cadastro(colaborador);
     }
 
 	@Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeEmailExistenteAoValidarOCadastro() {
+    public void deveLancarExcecaoDeEmailExistenteENaoValidarOCadastro() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        validar.cadastro(Colaborador.builder().email("teste@email.com").build());
+        Mockito.when(repository.existsByEmail(Mockito.anyString())).thenReturn(true);
+        validar.cadastro(colaborador);
     }
 
 	@Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeCpfExistenteAoValidarOCadastro() {
+    public void deveLancarExcecaoDeCpfExistenteENaoValidarOCadastro() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        Colaborador colaborador2 = Colaborador.builder()
-                                    .cpf("12345678910").build();
-        validar.cadastro(colaborador2);
+        Mockito.when(repository.existsByCpf(Mockito.anyString())).thenReturn(true);
+        validar.cadastro(colaborador);
     }
 
-    @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDePisExistenteAoValidarOCadastro() {
+	@Test(expected = RegraDeNegocioException.class)
+    public void deveLancarExcecaoDePisExistenteENaoValidarOCadastro() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        Colaborador colaborador2 = Colaborador.builder()
-                                    .pis("10123456789").build();
-        validar.cadastro(colaborador2);
+        Mockito.when(repository.existsByPis(Mockito.anyString())).thenReturn(true);
+        validar.cadastro(colaborador);
     }
 
     @Test(expected = Test.None.class)
     public void deveValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
         colaborador.setNome("Teste Atualizar");
         colaborador.setCep("22211133");
         colaborador.setNumero("8");
@@ -86,50 +87,50 @@ public class ValidacoesTest {
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeNomeInvalidoAoValidarAtualizacao() {
+    public void deveLancarExcecaoDeNomeInvalidoENaoValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
         colaborador.setNome("");
+        colaborador.setSenha("senhasenha");
         validar.atualizacao(colaborador);
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeCepInvalidoAoValidarAtualizacao() {
+    public void deveLancarExcecaoDeCepInválidoENaoValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        colaborador.setCep("11122");
+        colaborador.setCep("22211");
+        colaborador.setSenha("senhasenha");
         validar.atualizacao(colaborador);
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeNumeroInvalidoAoValidarAtualizacao() {
+    public void deveLancarExcecaoDeNumeroInvalidoENaoValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
         colaborador.setNumero("");
+        colaborador.setSenha("senhasenha");
         validar.atualizacao(colaborador);
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeCpfInvalidoAoValidarAtualizacao() {
+    public void deveLancarExcecaoDeCpfInvalidoENaoValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        colaborador.setCpf("123456789");
+        colaborador.setCpf("1112223");
+        colaborador.setSenha("senhasenha");
         validar.atualizacao(colaborador);
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDePisInvalidoAoValidarAtualizacao() {
+    public void deveLancarExcecaoDePisInvalidoENaoValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        colaborador.setPis("123456789");
+        colaborador.setPis("99988877");
+        colaborador.setSenha("senhasenha");
         validar.atualizacao(colaborador);
     }
 
     @Test(expected = RegraDeNegocioException.class)
-    public void deveLancarErroDeSenhaInvalidoAoValidarAtualizacao() {
+    public void deveLancarExcecaoDeSenhaInvalidaENaoValidarAtualizacao() {
         Colaborador colaborador = criarColaborador();
-        repository.save(colaborador);
-        colaborador.setSenha("123456");
+        colaborador.setSenha("senha");
         validar.atualizacao(colaborador);
     }
+
 }
