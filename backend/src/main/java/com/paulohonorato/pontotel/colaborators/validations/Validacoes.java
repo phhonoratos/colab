@@ -10,7 +10,16 @@ public class Validacoes {
 
     @Autowired
     ColaboradorRepository repository;
+
+    public Validacoes(){
+        
+    }
     
+    public Validacoes(ColaboradorRepository repository) {
+        super();
+        this.repository = repository;
+    }
+
     public void cadastro(Colaborador colaborador) {
         if(repository.existsByEmail(colaborador.getEmail())) {
             throw new RegraDeNegocioException("Já existe um usuário cadastrado com este email.");

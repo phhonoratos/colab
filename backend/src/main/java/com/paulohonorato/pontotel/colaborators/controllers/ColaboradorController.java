@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.paulohonorato.pontotel.colaborators.dtos.ColaboradorDTO;
 import com.paulohonorato.pontotel.colaborators.entities.Colaborador;
+import com.paulohonorato.pontotel.colaborators.exceptions.ErroDeAutenticacao;
+import com.paulohonorato.pontotel.colaborators.exceptions.RegraDeNegocioException;
 import com.paulohonorato.pontotel.colaborators.services.ColaboradorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,29 +40,29 @@ public class ColaboradorController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity buscaPorId(@PathVariable("id") Long idColaborador) {
+    public ResponseEntity<Optional<Colaborador>> buscaPorId(@PathVariable("id") Long idColaborador) {
         Optional<Colaborador> colaborador = service.buscarPorId(idColaborador);
-        return ResponseEntity.ok(colaborador);
+        return ResponseEntity.ok().body(colaborador);
     }
 
     @PostMapping("/acessar")
-    public ResponseEntity autenticar(@RequestBody ColaboradorDTO dto) {
+    public ResponseEntity<ColaboradorDTO> autenticar(@RequestBody ColaboradorDTO dto) {
         try {
             ColaboradorDTO colaboradorAutenticado = service.acessar(dto.getEmail());
             return ResponseEntity.ok().body(colaboradorAutenticado);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (ErroDeAutenticacao e) {
+            throw new ErroDeAutenticacao(e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity cadastrar(@RequestBody ColaboradorDTO dto) {
+    public ResponseEntity<ColaboradorDTO> cadastrar(@RequestBody ColaboradorDTO dto) {
         Colaborador colaborador = converterToEntity(dto);
         try {
             ColaboradorDTO colaboradorSalvo = converterToDto(service.cadastrar(colaborador));
-            return new ResponseEntity(colaboradorSalvo, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseEntity<ColaboradorDTO>(colaboradorSalvo, HttpStatus.CREATED);
+        } catch (RegraDeNegocioException e) {
+            throw new RegraDeNegocioException(e.getMessage());
         }
     }
 
